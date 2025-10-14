@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+    
+    <div class="promo-container" id="cart">
+    <p id="backToMain">⬅Back</p>
+</div>
+<div class="cart-container">
+  <div class="cart-header">
+    <h2 class="cart-title">Your Cart</h2>
+  </div>
+
+  <ul id="cart-list"></ul>
+
+  <div class="cart-footer">
+    <span class="total-label">Total:</span>
+    <span class="total-value" id="total-value"></span>
+  </div>
+
+  <button class="checkout-btn" id="checkout-btn">Checkout</button>
+</div>
+
+        <div id="dialogBox">
+            <div class="dialog-content">
+                <h2>All Done 🥳</h2>
+                <p>Order On Its Way To YOu</p>
+                <button id="closeDialog">Close</button>
+            </div>
+        </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const cartList = document.getElementById("cart-list");
+  const storedData = localStorage.getItem("products");
+  const totalValue = document.getElementById("total-value")
+  const checkoutBtn = document.getElementById("checkout-btn")
+  const dialogBox = document.getElementById("dialogBox")
+  const closeDialog = document.getElementById("closeDialog")
+
+  let totalPrice = 0
+  if (storedData) {
+    const data = JSON.parse(storedData);
+
+    data.products.forEach(product => {
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <span>${product.name}</span>
+        <span class="price">${product.price}</span>
+      `;
+      cartList.appendChild(li);
+      totalPrice += parseFloat(product.price.replace(/[^0-9.]/g, ""));
+    });
+    totalValue.textContent = `$ ${Math.round(totalPrice)}`
+  } else {
+    cartList.innerHTML = `<li>No products in cart</li>`;
+  }
+
+  checkoutBtn.addEventListener("click",function (){
+    setTimeout(() => {
+        dialogBox.style.display="flex"
+    }, 1000);
+  })
+
+   closeDialog.addEventListener('click',function(){
+        dialogBox.style.display = "none"
+        window.location.href = 'index.html'
+        localStorage.removeItem("products")
+
+    })
+});
+</script>
+</body>
+</html>
